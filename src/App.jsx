@@ -7,12 +7,13 @@ import EditorPanel from './components/editor/EditorPanel';
 import StyleCustomizer from './components/editor/StyleCustomizer';
 import AtsOptimizer from './components/editor/AtsOptimizer';
 import PreviewPanel from './components/editor/PreviewPanel';
-import { PenTool, Palette, ShieldAlert } from 'lucide-react';
+import { PenTool, Palette, ShieldAlert, Eye } from 'lucide-react';
 import './App.css';
 
 function MainApp() {
   const [currentView, setCurrentView] = useState('landing');
   const [activeEditorTab, setActiveEditorTab] = useState('personalInfo');
+  const [mobileActiveView, setMobileActiveView] = useState('editor'); // 'editor' | 'preview'
   
   // Left editor pane section selector: 'content' | 'style' | 'ats'
   const [leftPaneSection, setLeftPaneSection] = useState('content');
@@ -37,10 +38,10 @@ function MainApp() {
               flex: 1,
               minHeight: 0,
               overflow: 'hidden'
-            }} className="editor-grid-responsive">
+            }} className={`editor-grid-responsive mobile-show-${mobileActiveView}`}>
               
               {/* Left Column: Form & Design inputs */}
-              <div className="no-print" style={{
+              <div className="editor-column no-print" style={{
                 borderRight: '1px solid var(--border-color)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -58,7 +59,7 @@ function MainApp() {
                   {[
                     { id: 'content', name: 'Content Form', icon: <PenTool size={16} /> },
                     { id: 'style', name: 'Design & Style', icon: <Palette size={16} /> },
-                    { id: 'ats', name: `ATS Optimizer (${atsScore}%)`, icon: <ShieldAlert size={16} /> }
+                    { id: 'ats', name: `ATS (${atsScore}%)`, icon: <ShieldAlert size={16} /> }
                   ].map(sec => (
                     <button
                       key={sec.id}
@@ -74,7 +75,7 @@ function MainApp() {
                       }}
                     >
                       {sec.icon}
-                      <span>{sec.name}</span>
+                      <span className="hidden-mobile">{sec.name}</span>
                     </button>
                   ))}
                 </div>
@@ -102,7 +103,7 @@ function MainApp() {
               </div>
 
               {/* Right Column: Live A4 preview compile frame */}
-              <div style={{
+              <div className="preview-column" style={{
                 height: 'calc(100vh - 61px)',
                 overflowY: 'auto',
                 padding: '24px',
@@ -110,6 +111,24 @@ function MainApp() {
               }}>
                 <PreviewPanel />
               </div>
+
+              {/* Floating Mobile Toggle Button */}
+              <button 
+                className="btn btn-primary mobile-toggle-btn"
+                onClick={() => setMobileActiveView(mobileActiveView === 'editor' ? 'preview' : 'editor')}
+              >
+                {mobileActiveView === 'editor' ? (
+                  <>
+                    <Eye size={16} />
+                    <span>View Preview</span>
+                  </>
+                ) : (
+                  <>
+                    <PenTool size={16} />
+                    <span>Edit Resume</span>
+                  </>
+                )}
+              </button>
 
             </div>
           </div>

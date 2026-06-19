@@ -155,7 +155,7 @@ export default function Navbar({ currentView, setCurrentView }) {
               disabled={isSaving}
             >
               {isSaving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-              <span>Save Draft</span>
+              <span className="hidden-mobile">Save Draft</span>
             </button>
             <button 
               className="btn btn-secondary btn-sm"
@@ -163,7 +163,7 @@ export default function Navbar({ currentView, setCurrentView }) {
               title="Export Resume JSON Backup"
             >
               <FileDown size={15} />
-              <span>Export JSON</span>
+              <span className="hidden-mobile">Export JSON</span>
             </button>
           </>
         )}
@@ -171,7 +171,7 @@ export default function Navbar({ currentView, setCurrentView }) {
         {currentView !== 'editor' && (
           <label className="btn btn-secondary btn-sm" style={{ cursor: 'pointer', margin: 0 }}>
             <FileUp size={15} />
-            <span>Import JSON</span>
+            <span className="hidden-mobile">Import JSON</span>
             <input 
               type="file" 
               accept=".json" 
