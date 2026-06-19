@@ -24,11 +24,12 @@ app.use('/api', apiRouter);
 
 // Serve Static Files from React build in production
 const clientBuildPath = path.join(__dirname, '../dist');
+app.use('/Resume-Maker', express.static(clientBuildPath));
 app.use(express.static(clientBuildPath));
 
 app.get('*', (req, res, next) => {
   // If request is for api, skip to next route handler
-  if (req.path.startsWith('/api')) {
+  if (req.path.startsWith('/api') || req.path.startsWith('/Resume-Maker/api')) {
     return next();
   }
   res.sendFile(path.join(clientBuildPath, 'index.html'));
