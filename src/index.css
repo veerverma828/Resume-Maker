@@ -360,6 +360,7 @@ a {
     width: 100% !important;
     height: calc(100vh - 61px) !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important; /* Block horizontal scrollbars completely */
   }
 
   /* Floating toggle button for mobile editor/preview view switching */
@@ -379,14 +380,42 @@ a {
     justify-content: center;
   }
 
-  /* Templates scaling adjustments on mobile */
+  /* Templates scaling adjustments on mobile to preserve perfect A4 layout */
   .resume-preview-container {
-    width: 100% !important;
-    height: auto !important;
-    min-height: 1000px;
-    aspect-ratio: auto !important;
-    transform: scale(1) !important;
-    padding: 20px 24px !important;
+    width: 800px !important;
+    height: 1130px !important; /* Standard A4 height ratio */
+    aspect-ratio: 1 / 1.414 !important;
+    transform-origin: top center !important;
+    transform: scale(0.9) !important;
+    margin-bottom: -113px !important; /* Offset scaling vertical height gap */
+  }
+  
+  @media (max-width: 768px) {
+    .resume-preview-container {
+      transform: scale(0.7) !important;
+      margin-bottom: -339px !important;
+    }
+  }
+
+  @media (max-width: 580px) {
+    .resume-preview-container {
+      transform: scale(0.52) !important;
+      margin-bottom: -542px !important;
+    }
+  }
+
+  @media (max-width: 440px) {
+    .resume-preview-container {
+      transform: scale(0.42) !important;
+      margin-bottom: -655px !important;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .resume-preview-container {
+      transform: scale(0.36) !important;
+      margin-bottom: -723px !important;
+    }
   }
   
   /* Navbar logo resizing on mobile */

@@ -153,7 +153,7 @@ export default function LandingPage({ setCurrentView }) {
         </div>
 
         <h1 style={{
-          fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+          fontSize: 'clamp(1.8rem, 5vw, 4.5rem)',
           lineHeight: 1.15,
           letterSpacing: '-0.03em',
           fontWeight: 850,
