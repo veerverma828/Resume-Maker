@@ -63,11 +63,15 @@
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--bg-app);
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -75,6 +79,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Typography Utility */
