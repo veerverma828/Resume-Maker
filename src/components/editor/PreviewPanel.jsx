@@ -74,17 +74,21 @@ export default function PreviewPanel() {
           border: '1px solid var(--border-color)'
         }}
       >
+        {/* Overflow clip wrapper: keeps 800px A4 layout from pushing page width on mobile */}
         <div style={{
-          transform: 'scale(1)',
-          transformOrigin: 'top center',
           width: '100%',
-          maxWidth: '800px',
-          // Mobile scaling adjustment if preview overflows
-          '@media (maxWidth: 900px)': {
-            transform: 'scale(0.85)'
-          }
+          overflow: 'hidden',
+          display: 'flex',
+          justifyContent: 'center'
         }}>
-          {renderTemplate()}
+          <div style={{
+            transform: 'scale(1)',
+            transformOrigin: 'top center',
+            width: '100%',
+            maxWidth: '800px'
+          }}>
+            {renderTemplate()}
+          </div>
         </div>
       </div>
     </div>

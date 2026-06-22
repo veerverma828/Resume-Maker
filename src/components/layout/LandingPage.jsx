@@ -124,7 +124,7 @@ export default function LandingPage({ setCurrentView }) {
   };
 
   return (
-    <div className="animate-fade-in" style={{ padding: '0 24px 60px 24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="animate-fade-in" style={{ padding: '0 24px 60px 24px', maxWidth: '1200px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
 
       {/* Hero Section */}
       <section style={{
@@ -202,7 +202,7 @@ export default function LandingPage({ setCurrentView }) {
           Create ATS-optimized, high-impact resumes in minutes. Live side-by-side editing, premium print-ready templates, and instant PDF download.
         </p>
 
-        <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+        <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <button
             className="btn btn-primary"
             onClick={() => setCurrentView('dashboard')}
