@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ResumeProvider, useResume } from './context/ResumeContext';
 import Navbar from './components/layout/Navbar';
 import LandingPage from './components/layout/LandingPage';
@@ -19,10 +19,41 @@ function MainApp() {
   const [leftPaneSection, setLeftPaneSection] = useState('content');
   const { atsScore } = useResume();
 
+  const handleNavigate = (view) => {
+    if (view === 'dashboard') {
+      window.location.hash = '#/dashboard';
+    } else if (view === 'editor') {
+      window.location.hash = '#/editor';
+    } else {
+      window.location.hash = '#/';
+    }
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#/dashboard') {
+        setCurrentView('dashboard');
+      } else if (hash === '#/editor') {
+        setCurrentView('editor');
+      } else {
+        setCurrentView('landing');
+        if (hash !== '#/' && hash !== '') {
+          window.location.hash = '#/';
+        }
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard setCurrentView={setCurrentView} />;
+        return <Dashboard setCurrentView={handleNavigate} />;
       case 'editor':
         return (
           <div className="app-layout" style={{
@@ -135,13 +166,13 @@ function MainApp() {
         );
       case 'landing':
       default:
-        return <LandingPage setCurrentView={setCurrentView} />;
+        return <LandingPage setCurrentView={handleNavigate} />;
     }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Navbar currentView={currentView} setCurrentView={setCurrentView} />
+      <Navbar currentView={currentView} setCurrentView={handleNavigate} />
       {renderView()}
     </div>
   );
