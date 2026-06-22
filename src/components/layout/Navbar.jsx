@@ -77,6 +77,7 @@ export default function Navbar({ currentView, setCurrentView }) {
             letterSpacing: '-0.02em',
             fontFamily: 'var(--font-title)'
           }}
+          className={currentView === 'editor' ? 'hidden-mobile' : ''}
         >
           <div style={{
             background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
@@ -90,11 +91,14 @@ export default function Navbar({ currentView, setCurrentView }) {
           }}>
             <Sparkles size={16} />
           </div>
-          <span style={{
-            background: 'linear-gradient(to right, var(--text-primary), var(--primary))',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+          <span 
+            className="hidden-mobile"
+            style={{
+              background: 'linear-gradient(to right, var(--text-primary), var(--primary))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             ResumeCraft
           </span>
         </div>

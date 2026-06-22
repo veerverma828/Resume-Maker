@@ -67,6 +67,7 @@ export default function PreviewPanel() {
           justifyContent: 'center',
           alignItems: 'flex-start',
           overflowY: 'auto',
+          overflowX: 'hidden',
           padding: '12px 0',
           backgroundColor: 'var(--bg-app)',
           borderRadius: '12px',
