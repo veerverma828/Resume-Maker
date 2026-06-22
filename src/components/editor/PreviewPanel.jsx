@@ -41,13 +41,21 @@ export default function PreviewPanel() {
     const resumeElement = document.querySelector('.resume-preview-container');
     if (!resumeElement) return;
 
-    // Create a temporary hidden iframe
+    // Remove any existing print-iframe
+    const existingIframe = document.getElementById('print-iframe');
+    if (existingIframe) {
+      existingIframe.remove();
+    }
+
+    // Create a temporary off-screen iframe WITH a fixed physical size of 800px x 1131px
+    // This forces mobile browsers to render the document inside a standard A4-ratio desktop viewport.
     const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
+    iframe.id = 'print-iframe';
+    iframe.style.position = 'absolute';
+    iframe.style.left = '-9999px';
+    iframe.style.top = '-9999px';
+    iframe.style.width = '800px';
+    iframe.style.height = '1131px';
     iframe.style.border = '0';
     iframe.style.zIndex = '-1000';
     document.body.appendChild(iframe);
@@ -70,26 +78,36 @@ export default function PreviewPanel() {
           <title>Print Resume</title>
           ${stylesHTML}
           <style>
-            body {
+            @page {
+              size: A4 portrait;
+              margin: 0px !important;
+            }
+            html, body {
               background: white !important;
               color: black !important;
               margin: 0 !important;
               padding: 0 !important;
-              width: 100% !important;
+              width: 800px !important;
+              min-width: 800px !important;
+              max-width: 800px !important;
+              height: auto !important;
+              min-height: 1131px !important;
+              overflow: visible !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
             }
             .resume-preview-container {
-              width: 100% !important;
-              max-width: 100% !important;
+              width: 800px !important;
+              min-width: 800px !important;
+              max-width: 800px !important;
               height: auto !important;
+              min-height: 1131px !important;
+              aspect-ratio: auto !important;
               box-shadow: none !important;
               margin: 0 !important;
               border: none !important;
-              display: block !important;
+              overflow: visible !important;
               transform: none !important; /* Disable any active mobile screen transforms */
-            }
-            @page {
-              size: A4 portrait;
-              margin: 0px;
             }
           </style>
         </head>
@@ -98,9 +116,10 @@ export default function PreviewPanel() {
           <script>
             window.onload = function() {
               setTimeout(function() {
+                window.focus();
                 window.print();
                 window.parent.postMessage('resume-printed', '*');
-              }, 300);
+              }, 500);
             };
           </script>
         </body>
@@ -108,14 +127,24 @@ export default function PreviewPanel() {
     `);
     iframeDoc.close();
 
-    // Cleanup the iframe after printing is initiated
+    // Cleanup the iframe after printing is completed or a safety timeout is reached
+    let cleanupTimeout;
+    const cleanup = () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(cleanupTimeout);
+      const el = document.getElementById('print-iframe');
+      if (el) el.remove();
+    };
+
     const handleMessage = (event) => {
       if (event.data === 'resume-printed') {
-        window.removeEventListener('message', handleMessage);
-        document.body.removeChild(iframe);
+        cleanup();
       }
     };
+
     window.addEventListener('message', handleMessage);
+    // Safety fallback: Clean up the iframe after 10 seconds to avoid memory leaks
+    cleanupTimeout = setTimeout(cleanup, 10000);
   };
 
   const renderTemplate = () => {

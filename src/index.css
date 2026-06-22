@@ -293,10 +293,17 @@ a {
 
 /* Print Stylesheet Overrides */
 @media print {
-  body {
+  html, body {
     background: white !important;
     color: black !important;
+    width: 800px !important;
+    min-width: 800px !important;
+    max-width: 800px !important;
+    height: auto !important;
+    min-height: 1131px !important;
     overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   
   /* Hide all UI panels, buttons, and navigation elements */
@@ -321,9 +328,11 @@ a {
   .mobile-show-editor .preview-column,
   .mobile-show-preview .preview-column {
     display: block !important;
+    width: 800px !important;
+    min-width: 800px !important;
+    max-width: 800px !important;
     height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
+    min-height: 1131px !important;
     overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -343,9 +352,11 @@ a {
   .mobile-show-preview .preview-column > div > div:not(.no-print),
   .mobile-show-preview .preview-column > div > div > div:not(.no-print) {
     display: block !important;
+    width: 800px !important;
+    min-width: 800px !important;
+    max-width: 800px !important;
     height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
+    min-height: 1131px !important;
     overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -353,20 +364,19 @@ a {
     background: transparent !important;
     box-shadow: none !important;
     transform: none !important; /* Prevent browser print scaling distortion */
-    width: 100% !important;
-    max-width: 100% !important;
   }
   
   .resume-preview-container {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 800px !important;
+    min-width: 800px !important;
+    max-width: 800px !important;
     height: auto !important;
+    min-height: 1131px !important;
     aspect-ratio: auto !important;
     box-shadow: none !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
     border: none !important;
     overflow: visible !important;
-    display: block !important;
     background: white !important;
     color: black !important;
   }
