@@ -11,7 +11,84 @@ export default function PreviewPanel() {
   const { templateId } = customization;
 
   const handlePrint = () => {
-    window.print();
+    const resumeElement = document.querySelector('.resume-preview-container');
+    if (!resumeElement) return;
+
+    // Create a temporary hidden iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.style.zIndex = '-1000';
+    document.body.appendChild(iframe);
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+
+    // Copy all style/stylesheet link tags from parent document
+    let stylesHTML = '';
+    const styleElements = document.querySelectorAll('style, link[rel="stylesheet"]');
+    styleElements.forEach(el => {
+      stylesHTML += el.outerHTML;
+    });
+
+    // Write HTML content into the iframe
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Print Resume</title>
+          ${stylesHTML}
+          <style>
+            body {
+              background: white !important;
+              color: black !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              width: 100% !important;
+            }
+            .resume-preview-container {
+              width: 100% !important;
+              max-width: 100% !important;
+              height: auto !important;
+              box-shadow: none !important;
+              margin: 0 !important;
+              border: none !important;
+              display: block !important;
+              transform: none !important; /* Disable any active mobile screen transforms */
+            }
+            @page {
+              size: A4 portrait;
+              margin: 0px;
+            }
+          </style>
+        </head>
+        <body>
+          ${resumeElement.outerHTML}
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.parent.postMessage('resume-printed', '*');
+              }, 300);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
+
+    // Cleanup the iframe after printing is initiated
+    const handleMessage = (event) => {
+      if (event.data === 'resume-printed') {
+        window.removeEventListener('message', handleMessage);
+        document.body.removeChild(iframe);
+      }
+    };
+    window.addEventListener('message', handleMessage);
   };
 
   const renderTemplate = () => {
