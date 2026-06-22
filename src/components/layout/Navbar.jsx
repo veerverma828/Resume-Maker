@@ -139,7 +139,11 @@ export default function Navbar({ currentView, setCurrentView }) {
                 borderRadius: '4px',
                 border: '1px dashed var(--border-color)',
                 backgroundColor: 'var(--bg-app)',
-                margin: 0
+                margin: 0,
+                maxWidth: '180px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
               }}
               title="Click to rename"
             >

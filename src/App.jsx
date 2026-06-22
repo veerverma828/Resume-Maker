@@ -117,11 +117,7 @@ function MainApp() {
                 </div>
 
                 {/* Sub Panel Scroll Area */}
-                <div style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  padding: '24px'
-                }}>
+                <div className="editor-subpanel">
                   {leftPaneSection === 'content' && (
                     <EditorPanel 
                       activeTab={activeEditorTab} 

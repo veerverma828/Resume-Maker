@@ -94,7 +94,7 @@ export default function PersonalInfoForm() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      <div className="form-grid-2col">
         <div className="form-group">
           <label className="form-label">Email</label>
           <input
@@ -117,7 +117,7 @@ export default function PersonalInfoForm() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      <div className="form-grid-2col">
         <div className="form-group">
           <label className="form-label">Location (City, State)</label>
           <input
@@ -140,7 +140,7 @@ export default function PersonalInfoForm() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+      <div className="form-grid-2col">
         <div className="form-group">
           <label className="form-label">LinkedIn Profile</label>
           <input

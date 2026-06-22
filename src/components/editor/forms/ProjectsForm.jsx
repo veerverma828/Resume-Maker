@@ -85,7 +85,7 @@ export default function ProjectsForm() {
 
             {expandedSection === proj.id && (
               <div style={{ padding: '16px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="form-grid-2col" style={{ gap: '12px' }}>
                   <div className="form-group">
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Project Name</label>
                     <input
@@ -108,7 +108,7 @@ export default function ProjectsForm() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="form-grid-2col" style={{ gap: '12px' }}>
                   <div className="form-group">
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Technologies Used</label>
                     <input
