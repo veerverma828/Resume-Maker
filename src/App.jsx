@@ -20,34 +20,39 @@ function MainApp() {
   const { atsScore } = useResume();
 
   const handleNavigate = (view) => {
+    const base = import.meta.env.BASE_URL || '/';
+    let path = base;
     if (view === 'dashboard') {
-      window.location.hash = '#/dashboard';
+      path = `${base}dashboard`;
     } else if (view === 'editor') {
-      window.location.hash = '#/editor';
-    } else {
-      window.location.hash = '#/';
+      path = `${base}editor`;
+    }
+    
+    // Normalize duplicate slashes
+    path = path.replace(/\/+/g, '/');
+
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+      setCurrentView(view);
     }
   };
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#/dashboard') {
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      if (path.endsWith('/dashboard') || path.endsWith('/dashboard/')) {
         setCurrentView('dashboard');
-      } else if (hash === '#/editor') {
+      } else if (path.endsWith('/editor') || path.endsWith('/editor/')) {
         setCurrentView('editor');
       } else {
         setCurrentView('landing');
-        if (hash !== '#/' && hash !== '') {
-          window.location.hash = '#/';
-        }
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
+    window.addEventListener('popstate', handleLocationChange);
+    handleLocationChange();
 
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   const renderView = () => {
