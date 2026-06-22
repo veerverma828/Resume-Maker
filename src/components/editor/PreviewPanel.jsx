@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useResume } from '../../context/ResumeContext';
 import ClassicBlue from '../templates/ClassicBlue';
 import MinimalModern from '../templates/MinimalModern';
@@ -6,9 +6,28 @@ import CreativeSidebar from '../templates/CreativeSidebar';
 import TechDeveloper from '../templates/TechDeveloper';
 import { Printer, Download } from 'lucide-react';
 
+const RESUME_WIDTH = 800; // Fixed A4 width in px
+
 export default function PreviewPanel() {
   const { resumeData, customization } = useResume();
   const { templateId } = customization;
+  const wrapperRef = useRef(null);
+  const [scale, setScale] = useState(1);
+
+  // Compute scale to fit resume within wrapper width
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const compute = () => {
+      const containerWidth = el.offsetWidth;
+      const newScale = Math.min(1, containerWidth / RESUME_WIDTH);
+      setScale(newScale);
+    };
+    compute();
+    const observer = new ResizeObserver(compute);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const handlePrint = () => {
     const resumeElement = document.querySelector('.resume-preview-container');
@@ -140,9 +159,6 @@ export default function PreviewPanel() {
       <div 
         style={{
           flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
           overflowY: 'auto',
           overflowX: 'hidden',
           padding: '12px 0',
@@ -151,18 +167,22 @@ export default function PreviewPanel() {
           border: '1px solid var(--border-color)'
         }}
       >
-        {/* Overflow clip wrapper: keeps 800px A4 layout from pushing page width on mobile */}
-        <div style={{
-          width: '100%',
-          overflow: 'hidden',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-          <div style={{
-            transform: 'scale(1)',
-            transformOrigin: 'top center',
+        {/* Outer clipping wrapper — measures available width */}
+        <div
+          ref={wrapperRef}
+          style={{
             width: '100%',
-            maxWidth: '800px'
+            overflow: 'hidden',
+          }}
+        >
+          {/* Inner container: fixed at 800px, scaled down to fit, centered via left offset */}
+          <div style={{
+            width: `${RESUME_WIDTH}px`,
+            transformOrigin: 'top left',
+            transform: `scale(${scale})`,
+            marginLeft: `${(wrapperRef.current ? wrapperRef.current.offsetWidth : RESUME_WIDTH) * (1 - scale) / 2}px`,
+            // Collapse the empty space that remains after scaling
+            marginBottom: `${-(RESUME_WIDTH * 1.414 * (1 - scale))}px`,
           }}>
             {renderTemplate()}
           </div>

@@ -444,56 +444,15 @@ a {
   nav {
     padding: 10px 16px !important;
   }
-
-  /*
-   * KEY FIX: The resume preview is always rendered at 800px wide (A4 format).
-   * CSS transform: scale() shrinks it VISUALLY but the browser still reserves
-   * the full 800px layout space — which pushes the page width to 800px on mobile
-   * and creates horizontal scroll.
-   *
-   * Solution: Set width/height to 800px/1130px on the element so A4 renders
-   * correctly, but its PARENT wrapper uses overflow:hidden + width:100% to clip
-   * the layout box. We use transform-origin:top center + margin adjustments
-   * to compensate for the visual gap left by scaling down.
-   */
-  .resume-preview-container {
-    width: 800px !important;
-    height: 1130px !important;
-    aspect-ratio: 1 / 1.414 !important;
-    transform-origin: top center !important;
-    transform: scale(0.9) !important;
-    margin-bottom: -113px !important;
-  }
 }
 
-/* These MUST be top-level (not nested) so they actually apply */
-@media screen and (max-width: 768px) {
-  .resume-preview-container {
-    transform: scale(0.7) !important;
-    margin-bottom: -339px !important;
-  }
-}
 
-@media screen and (max-width: 580px) {
-  .resume-preview-container {
-    transform: scale(0.52) !important;
-    margin-bottom: -542px !important;
-  }
-}
 
-@media screen and (max-width: 440px) {
-  .resume-preview-container {
-    transform: scale(0.42) !important;
-    margin-bottom: -655px !important;
-  }
-}
 
-@media screen and (max-width: 360px) {
-  .resume-preview-container {
-    transform: scale(0.36) !important;
-    margin-bottom: -723px !important;
-  }
-}
+
+
+
+
 
 /* Responsive grid for forms (collapses to 1 column on mobile) */
 .form-grid-2col {
