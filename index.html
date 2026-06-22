@@ -5,6 +5,15 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ResumeCraft - Premium Resume Maker</title>
+    <script type="text/javascript">
+      (function() {
+        const redirectPath = sessionStorage.getItem('redirect_path');
+        if (redirectPath) {
+          sessionStorage.removeItem('redirect_path');
+          window.history.replaceState(null, null, redirectPath);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

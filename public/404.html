@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      // Save the path we were trying to access
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const hash = window.location.hash;
+      
+      // Store it in sessionStorage
+      sessionStorage.setItem('redirect_path', path + search + hash);
+      
+      // Redirect to the repository home page (index.html)
+      // Check if we are running locally or on custom domain vs github pages
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        window.location.replace('/');
+      } else {
+        const pathSegments = path.split('/').filter(Boolean);
+        const repoName = pathSegments[0] || '';
+        window.location.replace('/' + repoName + (repoName ? '/' : ''));
+      }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
