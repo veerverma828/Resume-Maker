@@ -4,13 +4,21 @@ import ClassicBlue from '../templates/ClassicBlue';
 import MinimalModern from '../templates/MinimalModern';
 import CreativeSidebar from '../templates/CreativeSidebar';
 import TechDeveloper from '../templates/TechDeveloper';
-import { Printer, Download } from 'lucide-react';
+import { Printer, Download, Sparkles } from 'lucide-react';
+import { initialResumeData, initialCustomization } from '../../constants/defaultResumeData';
 
 const RESUME_WIDTH = 800; // Fixed A4 width in px
 
 export default function PreviewPanel() {
-  const { resumeData, customization } = useResume();
+  const { resumeData, customization, setResumeData, setCustomization } = useResume();
   const { templateId } = customization;
+
+  const handleLoadDemo = () => {
+    if (window.confirm("This will overwrite your current draft with sample demo details. Are you sure you want to proceed?")) {
+      setResumeData(initialResumeData);
+      setCustomization(initialCustomization);
+    }
+  };
   const wrapperRef = useRef(null);
   const [scale, setScale] = useState(1);
 
@@ -146,13 +154,23 @@ export default function PreviewPanel() {
         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
           Live Document Preview
         </span>
-        <button 
-          className="btn btn-primary btn-sm"
-          onClick={handlePrint}
-        >
-          <Printer size={15} />
-          <span>Print / Save PDF</span>
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button 
+            className="btn btn-secondary btn-sm"
+            onClick={handleLoadDemo}
+            title="Load template with sample demo data"
+          >
+            <Sparkles size={15} />
+            <span>Load Demo Data</span>
+          </button>
+          <button 
+            className="btn btn-primary btn-sm"
+            onClick={handlePrint}
+          >
+            <Printer size={15} />
+            <span>Print / Save PDF</span>
+          </button>
+        </div>
       </div>
 
       {/* Render Template Frame */}
