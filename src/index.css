@@ -299,8 +299,62 @@ a {
     overflow: visible !important;
   }
   
-  #root, .app-layout, .editor-panel, .navigation-bar, .style-customizer, .ats-optimizer, .btn, .no-print {
+  /* Hide all UI panels, buttons, and navigation elements */
+  .no-print, 
+  .navigation-bar, 
+  .editor-column, 
+  .mobile-toggle-btn, 
+  .btn,
+  nav,
+  .mobile-show-editor .editor-column,
+  .mobile-show-preview .editor-column,
+  .preview-column .no-print,
+  .preview-column > div > .no-print {
     display: none !important;
+  }
+  
+  /* Reset layout constraints of parent elements to let print flow naturally */
+  #root, 
+  .app-layout, 
+  .editor-grid-responsive, 
+  .preview-column,
+  .mobile-show-editor .preview-column,
+  .mobile-show-preview .preview-column {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Reset PreviewPanel nested styling container constraints */
+  .preview-column > div:not(.no-print),
+  .preview-column > div > div:not(.no-print),
+  .preview-column > div > div > div:not(.no-print),
+  .mobile-show-editor .preview-column > div:not(.no-print),
+  .mobile-show-editor .preview-column > div > div:not(.no-print),
+  .mobile-show-editor .preview-column > div > div > div:not(.no-print),
+  .mobile-show-preview .preview-column > div:not(.no-print),
+  .mobile-show-preview .preview-column > div > div:not(.no-print),
+  .mobile-show-preview .preview-column > div > div > div:not(.no-print) {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important; /* Prevent browser print scaling distortion */
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .resume-preview-container {
@@ -339,7 +393,7 @@ a {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
   .hidden-mobile {
     display: none !important;
   }
@@ -413,28 +467,28 @@ a {
 }
 
 /* These MUST be top-level (not nested) so they actually apply */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .resume-preview-container {
     transform: scale(0.7) !important;
     margin-bottom: -339px !important;
   }
 }
 
-@media (max-width: 580px) {
+@media screen and (max-width: 580px) {
   .resume-preview-container {
     transform: scale(0.52) !important;
     margin-bottom: -542px !important;
   }
 }
 
-@media (max-width: 440px) {
+@media screen and (max-width: 440px) {
   .resume-preview-container {
     transform: scale(0.42) !important;
     margin-bottom: -655px !important;
   }
 }
 
-@media (max-width: 360px) {
+@media screen and (max-width: 360px) {
   .resume-preview-container {
     transform: scale(0.36) !important;
     margin-bottom: -723px !important;
@@ -455,7 +509,7 @@ a {
   padding: 24px;
 }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
   .form-grid-2col {
     grid-template-columns: 1fr;
     gap: 12px;
