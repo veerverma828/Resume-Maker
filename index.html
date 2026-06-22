@@ -5,7 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/Resume-Maker/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ResumeCraft - Premium Resume Maker</title>
-    <script type="module" crossorigin src="/Resume-Maker/assets/index-CVCWByDt.js"></script>
+    <script type="text/javascript">
+      (function() {
+        const redirectPath = sessionStorage.getItem('redirect_path');
+        if (redirectPath) {
+          sessionStorage.removeItem('redirect_path');
+          window.history.replaceState(null, null, redirectPath);
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/Resume-Maker/assets/index-CRaKrc_5.js"></script>
     <link rel="stylesheet" crossorigin href="/Resume-Maker/assets/index-DfXAc40-.css">
   </head>
   <body>
