@@ -364,7 +364,6 @@ a {
     aspect-ratio: auto !important;
     box-shadow: none !important;
     margin: 0 !important;
-    padding: 0 !important;
     border: none !important;
     overflow: visible !important;
     display: block !important;
@@ -421,6 +420,7 @@ a {
     height: calc(100vh - 61px) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
+    padding: 12px !important; /* Reduce padding on mobile to maximize resume scale */
   }
 
   /* Floating toggle button for mobile editor/preview view switching */

@@ -167,22 +167,24 @@ export default function PreviewPanel() {
           border: '1px solid var(--border-color)'
         }}
       >
-        {/* Outer clipping wrapper — measures available width */}
+        {/* Outer clipping wrapper — measures available width and centers content */}
         <div
           ref={wrapperRef}
           style={{
             width: '100%',
             overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center'
           }}
         >
-          {/* Inner container: fixed at 800px, scaled down to fit, centered via left offset */}
+          {/* Inner container: fixed at 800px, scaled down to fit, centered automatically */}
           <div style={{
             width: `${RESUME_WIDTH}px`,
-            transformOrigin: 'top left',
+            transformOrigin: 'top center',
             transform: `scale(${scale})`,
-            marginLeft: `${(wrapperRef.current ? wrapperRef.current.offsetWidth : RESUME_WIDTH) * (1 - scale) / 2}px`,
             // Collapse the empty space that remains after scaling
             marginBottom: `${-(RESUME_WIDTH * 1.414 * (1 - scale))}px`,
+            flexShrink: 0
           }}>
             {renderTemplate()}
           </div>
