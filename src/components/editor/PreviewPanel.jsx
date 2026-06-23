@@ -50,28 +50,6 @@ export default function PreviewPanel() {
     const resumeElement = document.querySelector('.resume-preview-container');
     if (!resumeElement) return;
 
-    // Remove any existing print-iframe
-    const existingIframe = document.getElementById('print-iframe');
-    if (existingIframe) {
-      existingIframe.remove();
-    }
-
-    // Create a temporary off-screen iframe WITH a fixed physical size of 800px x 1131px
-    // This forces mobile browsers to render the document inside a standard A4-ratio desktop viewport.
-    const iframe = document.createElement('iframe');
-    iframe.id = 'print-iframe';
-    iframe.style.position = 'absolute';
-    iframe.style.left = '-9999px';
-    iframe.style.top = '-9999px';
-    iframe.style.width = '800px';
-    iframe.style.height = '1131px';
-    iframe.style.border = '0';
-    iframe.style.zIndex = '-1000';
-    document.body.appendChild(iframe);
-
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    iframeDoc.open();
-
     // Copy all style/stylesheet link tags from parent document
     let stylesHTML = '';
     const styleElements = document.querySelectorAll('style, link[rel="stylesheet"]');
@@ -79,18 +57,31 @@ export default function PreviewPanel() {
       stylesHTML += el.outerHTML;
     });
 
-    // Write HTML content into the iframe
-    iframeDoc.write(`
+    // Open a new tab. Mobile browsers correctly respect the viewport meta tag
+    // on a top-level page, unlike inside iframes where it is ignored.
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      // Popup was blocked — fall back to a simple window.print() as a last resort
+      window.print();
+      return;
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Print Resume</title>
-          <meta name="viewport" content="width=800, initial-scale=1.0">
+          <title>Resume</title>
+          <!--
+            width=800 tells mobile browsers to lay out the page as if the viewport
+            is 800px wide, matching the fixed resume width so nothing is miniaturized.
+          -->
+          <meta name="viewport" content="width=800, initial-scale=1.0, shrink-to-fit=no">
           ${stylesHTML}
           <style>
             @page {
               size: A4 portrait;
-              margin: 0px !important;
+              margin: 0mm;
             }
             html, body {
               background: white !important;
@@ -100,6 +91,7 @@ export default function PreviewPanel() {
               width: 800px !important;
               min-width: 800px !important;
               max-width: 800px !important;
+              /* height: auto so the browser only prints as many pages as content needs */
               height: auto !important;
               min-height: auto !important;
               overflow: visible !important;
@@ -110,6 +102,7 @@ export default function PreviewPanel() {
               width: 800px !important;
               min-width: 800px !important;
               max-width: 800px !important;
+              /* Override the default min-height so a short resume doesn't force a blank second page */
               height: auto !important;
               min-height: auto !important;
               aspect-ratio: auto !important;
@@ -117,45 +110,31 @@ export default function PreviewPanel() {
               margin: 0 !important;
               border: none !important;
               overflow: visible !important;
-              transform: none !important; /* Disable any active mobile screen transforms */
+              transform: none !important;
             }
           </style>
         </head>
         <body>
           ${resumeElement.outerHTML}
           <script>
+            // Trigger print automatically once the page is fully loaded
             window.onload = function() {
               setTimeout(function() {
                 window.focus();
                 window.print();
-                window.parent.postMessage('resume-printed', '*');
-              }, 500);
+                // Close the tab after the print dialog is dismissed
+                window.onafterprint = function() {
+                  window.close();
+                };
+              }, 400);
             };
-          </script>
+          <\/script>
         </body>
       </html>
     `);
-    iframeDoc.close();
-
-    // Cleanup the iframe after printing is completed or a safety timeout is reached
-    let cleanupTimeout;
-    const cleanup = () => {
-      window.removeEventListener('message', handleMessage);
-      clearTimeout(cleanupTimeout);
-      const el = document.getElementById('print-iframe');
-      if (el) el.remove();
-    };
-
-    const handleMessage = (event) => {
-      if (event.data === 'resume-printed') {
-        cleanup();
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    // Safety fallback: Clean up the iframe after 10 seconds to avoid memory leaks
-    cleanupTimeout = setTimeout(cleanup, 10000);
+    printWindow.document.close();
   };
+
 
   const renderTemplate = () => {
     switch (templateId) {
