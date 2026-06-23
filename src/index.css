@@ -595,5 +595,34 @@ a {
   display: none;
 }
 
+/* Navbar Responsiveness */
+.navbar-title {
+  max-width: 180px;
+}
+
+.navbar-title-input {
+  width: 180px;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-title {
+    max-width: 90px !important;
+  }
+  
+  .navbar-title-input {
+    width: 90px !important;
+  }
+  
+  .btn-mobile-icon {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    display: inline-flex !important;
+  }
+}
+
 
 

@@ -121,13 +121,12 @@ export default function Navbar({ currentView, setCurrentView }) {
               onBlur={handleTitleBlur}
               onKeyDown={(e) => e.key === 'Enter' && handleTitleBlur()}
               autoFocus
-              className="form-input"
+              className="form-input navbar-title-input"
               style={{
                 fontSize: '1rem',
                 fontWeight: 600,
                 padding: '4px 10px',
                 height: '32px',
-                width: '180px',
                 textAlign: 'center'
               }}
             />
@@ -137,6 +136,7 @@ export default function Navbar({ currentView, setCurrentView }) {
                 setTempTitle(resumeTitle);
                 setIsEditingTitle(true);
               }}
+              className="navbar-title"
               style={{
                 fontSize: '1rem',
                 fontWeight: 600,
@@ -146,7 +146,6 @@ export default function Navbar({ currentView, setCurrentView }) {
                 border: '1px dashed var(--border-color)',
                 backgroundColor: 'var(--bg-app)',
                 margin: 0,
-                maxWidth: '180px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
@@ -164,7 +163,7 @@ export default function Navbar({ currentView, setCurrentView }) {
         {currentView === 'editor' && (
           <>
             <button 
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm btn-mobile-icon"
               onClick={() => saveResumeToServer()}
               disabled={isSaving}
             >
@@ -172,7 +171,7 @@ export default function Navbar({ currentView, setCurrentView }) {
               <span className="hidden-mobile">Save Draft</span>
             </button>
             <button 
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm btn-mobile-icon"
               onClick={exportResume}
               title="Export Resume JSON Backup"
             >
@@ -183,7 +182,7 @@ export default function Navbar({ currentView, setCurrentView }) {
         )}
 
         {currentView !== 'editor' && (
-          <label className="btn btn-secondary btn-sm" style={{ cursor: 'pointer', margin: 0 }}>
+          <label className="btn btn-secondary btn-sm btn-mobile-icon" style={{ cursor: 'pointer', margin: 0 }}>
             <FileUp size={15} />
             <span className="hidden-mobile">Import JSON</span>
             <input 
