@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/Resume-Maker/',
   plugins: [react()],
   server: {
-    port: 3000,
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:5001',

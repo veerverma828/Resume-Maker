@@ -4,6 +4,10 @@ import ClassicBlue from '../templates/ClassicBlue';
 import MinimalModern from '../templates/MinimalModern';
 import CreativeSidebar from '../templates/CreativeSidebar';
 import TechDeveloper from '../templates/TechDeveloper';
+import ExecutiveDark from '../templates/ExecutiveDark';
+import ElegantSerif from '../templates/ElegantSerif';
+import Academic from '../templates/Academic';
+import BoldImpact from '../templates/BoldImpact';
 import { Printer, Download, Sparkles } from 'lucide-react';
 import { initialResumeData, initialCustomization } from '../../constants/defaultResumeData';
 
@@ -144,6 +148,14 @@ export default function PreviewPanel() {
         return <CreativeSidebar data={resumeData} customization={customization} />;
       case 'tech':
         return <TechDeveloper data={resumeData} customization={customization} />;
+      case 'executive':
+        return <ExecutiveDark data={resumeData} customization={customization} />;
+      case 'elegant':
+        return <ElegantSerif data={resumeData} customization={customization} />;
+      case 'academic':
+        return <Academic data={resumeData} customization={customization} />;
+      case 'bold':
+        return <BoldImpact data={resumeData} customization={customization} />;
       case 'classic':
       default:
         return <ClassicBlue data={resumeData} customization={customization} />;

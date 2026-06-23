@@ -114,6 +114,113 @@ export default function LandingPage({ setCurrentView }) {
           <rect x="55" y="58" width="35" height="30" fill="#fafafa" rx="1" />
         </svg>
       )
+    },
+    {
+      id: 'executive',
+      name: 'Executive Dark',
+      desc: 'Commanding dark-navy header with crisp white typography. Built for senior leadership and C-suite roles.',
+      color: '#0f172a',
+      layoutIcon: (
+        <svg viewBox="0 0 100 140" style={{ width: '100%', height: '100%', fill: 'none' }}>
+          <rect x="5" y="5" width="90" height="130" rx="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="2" />
+          <rect x="5" y="5" width="90" height="36" rx="3" fill="#0f172a" />
+          <rect x="10" y="13" width="45" height="5" fill="#ffffff" rx="1" opacity="0.9" />
+          <rect x="10" y="22" width="28" height="3" fill="#60a5fa" rx="0.5" />
+          <rect x="10" y="29" width="55" height="2" fill="#475569" rx="0.5" />
+          <rect x="10" y="50" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="43" y="51" width="47" height="1" fill="#e2e8f0" rx="0.5" />
+          <rect x="14" y="58" width="76" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="14" y="63" width="60" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="10" y="75" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="43" y="76" width="47" height="1" fill="#e2e8f0" rx="0.5" />
+          <rect x="14" y="84" width="76" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="14" y="89" width="50" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="10" y="101" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="43" y="102" width="47" height="1" fill="#e2e8f0" rx="0.5" />
+          <rect x="14" y="110" width="30" height="6" fill="#f1f5f9" rx="2" />
+          <rect x="48" y="110" width="20" height="6" fill="#f1f5f9" rx="2" />
+        </svg>
+      )
+    },
+    {
+      id: 'elegant',
+      name: 'Elegant Serif',
+      desc: 'Centered, symmetrical layout with decorative dividers and a circular avatar. Great for creatives and writers.',
+      color: '#9333ea',
+      layoutIcon: (
+        <svg viewBox="0 0 100 140" style={{ width: '100%', height: '100%', fill: 'none' }}>
+          <rect x="5" y="5" width="90" height="130" rx="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="2" />
+          <circle cx="50" cy="18" r="8" fill="#f3e8ff" stroke="#9333ea" strokeWidth="1.5" />
+          <rect x="25" y="30" width="50" height="5" fill="#0f172a" rx="1" />
+          <rect x="33" y="39" width="34" height="3" fill="#9333ea" rx="0.5" />
+          <line x1="15" y1="47" x2="42" y2="47" stroke="#cbd5e1" strokeWidth="1" />
+          <circle cx="50" cy="47" r="2" fill="#9333ea" />
+          <line x1="58" y1="47" x2="85" y2="47" stroke="#cbd5e1" strokeWidth="1" />
+          <rect x="20" y="53" width="60" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="30" y="63" width="40" height="3" fill="#0f172a" rx="1" />
+          <line x1="15" y1="70" x2="85" y2="70" stroke="#e2e8f0" strokeWidth="1" />
+          <rect x="10" y="75" width="80" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="10" y="80" width="65" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="15" y="92" width="20" height="6" fill="#f3e8ff" rx="3" />
+          <rect x="40" y="92" width="20" height="6" fill="#f3e8ff" rx="3" />
+          <rect x="65" y="92" width="20" height="6" fill="#f3e8ff" rx="3" />
+        </svg>
+      )
+    },
+    {
+      id: 'academic',
+      name: 'Academic',
+      desc: 'Scholarly left-border accent lines with structured sections. Crafted for researchers, academics, and grad students.',
+      color: '#059669',
+      layoutIcon: (
+        <svg viewBox="0 0 100 140" style={{ width: '100%', height: '100%', fill: 'none' }}>
+          <rect x="5" y="5" width="90" height="130" rx="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="2" />
+          <rect x="10" y="12" width="48" height="5" fill="#0f172a" rx="1" />
+          <rect x="10" y="20" width="30" height="3" fill="#059669" rx="0.5" />
+          <line x1="10" y1="30" x2="90" y2="30" stroke="#e2e8f0" strokeWidth="1.5" />
+          <rect x="10" y="38" width="3" height="18" fill="#059669" rx="1" />
+          <rect x="17" y="40" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="17" y="47" width="65" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="17" y="52" width="55" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="10" y="64" width="3" height="18" fill="#059669" rx="1" />
+          <rect x="17" y="66" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="17" y="73" width="65" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="17" y="78" width="50" height="2" fill="#f1f5f9" rx="0.5" />
+          <rect x="10" y="90" width="3" height="18" fill="#059669" rx="1" />
+          <rect x="17" y="92" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="17" y="99" width="22" height="5" fill="#d1fae5" rx="2" />
+          <rect x="43" y="99" width="22" height="5" fill="#d1fae5" rx="2" />
+          <rect x="69" y="99" width="15" height="5" fill="#d1fae5" rx="2" />
+        </svg>
+      )
+    },
+    {
+      id: 'bold',
+      name: 'Bold Impact',
+      desc: 'Full-width vibrant header with card-style sections. Designed to make a memorable first impression.',
+      color: '#e11d48',
+      layoutIcon: (
+        <svg viewBox="0 0 100 140" style={{ width: '100%', height: '100%', fill: 'none' }}>
+          <rect x="5" y="5" width="90" height="130" rx="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="2" />
+          <rect x="5" y="5" width="90" height="40" rx="3" fill="#e11d48" />
+          <circle cx="82" cy="10" r="14" fill="rgba(255,255,255,0.08)" />
+          <circle cx="70" cy="30" r="10" fill="rgba(255,255,255,0.05)" />
+          <rect x="12" y="14" width="48" height="6" fill="#ffffff" rx="1" opacity="0.95" />
+          <rect x="12" y="24" width="32" height="3" fill="rgba(255,255,255,0.7)" rx="0.5" />
+          <rect x="12" y="30" width="52" height="2" fill="rgba(255,255,255,0.4)" rx="0.5" />
+          <rect x="10" y="53" width="80" height="18" fill="#f8fafc" rx="2" />
+          <rect x="13" y="56" width="3" height="12" fill="#e11d48" rx="1" />
+          <rect x="20" y="57" width="35" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="20" y="63" width="50" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="10" y="77" width="80" height="18" fill="#f8fafc" rx="2" />
+          <rect x="13" y="80" width="3" height="12" fill="#e11d48" rx="1" />
+          <rect x="20" y="81" width="30" height="3" fill="#0f172a" rx="0.5" />
+          <rect x="20" y="87" width="50" height="2" fill="#e2e8f0" rx="0.5" />
+          <rect x="10" y="103" width="24" height="6" fill="#ffe4e6" rx="3" />
+          <rect x="38" y="103" width="24" height="6" fill="#ffe4e6" rx="3" />
+          <rect x="66" y="103" width="24" height="6" fill="#ffe4e6" rx="3" />
+        </svg>
+      )
     }
   ];
 
@@ -296,7 +403,7 @@ export default function LandingPage({ setCurrentView }) {
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h2 style={{ fontSize: '2.25rem', marginBottom: '12px' }}>Choose a Professional Template</h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-            Select one of our meticulously crafted designs. Customize layout, colors, and margins in real-time.
+            Pick from 8 meticulously crafted designs. Customize layout, colors, and margins in real-time.
           </p>
         </div>
 

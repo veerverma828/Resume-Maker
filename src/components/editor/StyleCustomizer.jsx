@@ -32,10 +32,14 @@ export default function StyleCustomizer() {
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           {[
-            { id: 'classic', name: 'Classic Blue' },
-            { id: 'minimal', name: 'Minimal Modern' },
-            { id: 'sidebar', name: 'Split Sidebar' },
-            { id: 'tech', name: 'Tech/Developer' }
+            { id: 'classic', name: 'Classic Blue', emoji: '📄' },
+            { id: 'minimal', name: 'Minimal Modern', emoji: '✦' },
+            { id: 'sidebar', name: 'Split Sidebar', emoji: '◧' },
+            { id: 'tech', name: 'Tech Developer', emoji: '⌨' },
+            { id: 'executive', name: 'Executive Dark', emoji: '🖤' },
+            { id: 'elegant', name: 'Elegant Serif', emoji: '✦' },
+            { id: 'academic', name: 'Academic', emoji: '🎓' },
+            { id: 'bold', name: 'Bold Impact', emoji: '⚡' }
           ].map(temp => (
             <button
               key={temp.id}
@@ -45,10 +49,14 @@ export default function StyleCustomizer() {
                 borderColor: customization.templateId === temp.id ? 'var(--primary)' : 'var(--border-color)',
                 backgroundColor: customization.templateId === temp.id ? 'var(--primary-light)' : 'var(--bg-card)',
                 color: customization.templateId === temp.id ? 'var(--primary)' : 'var(--text-primary)',
-                fontWeight: customization.templateId === temp.id ? 700 : 500
+                fontWeight: customization.templateId === temp.id ? 700 : 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
               }}
             >
-              {temp.name}
+              <span style={{ fontSize: '0.85em' }}>{temp.emoji}</span>
+              <span>{temp.name}</span>
             </button>
           ))}
         </div>
