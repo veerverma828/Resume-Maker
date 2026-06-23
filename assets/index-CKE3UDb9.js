@@ -14,6 +14,7 @@ Error generating stack: `+e.message+`
       <html>
         <head>
           <title>Print Resume</title>
+          <meta name="viewport" content="width=800, initial-scale=1.0">
           ${i}
           <style>
             @page {
@@ -29,7 +30,7 @@ Error generating stack: `+e.message+`
               min-width: 800px !important;
               max-width: 800px !important;
               height: auto !important;
-              min-height: 1131px !important;
+              min-height: auto !important;
               overflow: visible !important;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
@@ -39,7 +40,7 @@ Error generating stack: `+e.message+`
               min-width: 800px !important;
               max-width: 800px !important;
               height: auto !important;
-              min-height: 1131px !important;
+              min-height: auto !important;
               aspect-ratio: auto !important;
               box-shadow: none !important;
               margin: 0 !important;
