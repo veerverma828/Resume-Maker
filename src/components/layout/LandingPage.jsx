@@ -3,7 +3,7 @@ import { useResume } from '../../context/ResumeContext';
 import { Sparkles, FileText, CheckCircle, Smartphone, Award, ExternalLink, ArrowRight } from 'lucide-react';
 
 export default function LandingPage({ setCurrentView }) {
-  const { createNewResume, updateCustomization } = useResume();
+  const { createNewResume } = useResume();
   const [typedText, setTypedText] = useState('');
   const [loopIndex, setLoopIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -225,8 +225,10 @@ export default function LandingPage({ setCurrentView }) {
   ];
 
   const handleSelectTemplate = (tempId) => {
-    createNewResume();
-    updateCustomization({ templateId: tempId });
+    // Pass templateId directly into createNewResume to avoid a React batching race
+    // condition where setCustomization(initialCustomization) from createNewResume could
+    // overwrite the subsequent updateCustomization({ templateId }) call.
+    createNewResume(tempId);
     setCurrentView('editor');
   };
 

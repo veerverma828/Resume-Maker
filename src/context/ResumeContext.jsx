@@ -8,12 +8,22 @@ export const ResumeProvider = ({ children }) => {
   const [activeResumeId, setActiveResumeId] = useState(null);
   const [resumeTitle, setResumeTitle] = useState('My Resume');
   const [resumeData, setResumeData] = useState(() => {
-    const saved = localStorage.getItem('resumemaker_current_draft');
-    return saved ? JSON.parse(saved) : initialResumeData;
+    try {
+      const saved = localStorage.getItem('resumemaker_current_draft');
+      return saved ? JSON.parse(saved) : initialResumeData;
+    } catch {
+      // Corrupt localStorage data — fall back to defaults to avoid blank screen
+      return initialResumeData;
+    }
   });
   const [customization, setCustomization] = useState(() => {
-    const saved = localStorage.getItem('resumemaker_current_style');
-    return saved ? JSON.parse(saved) : initialCustomization;
+    try {
+      const saved = localStorage.getItem('resumemaker_current_style');
+      return saved ? JSON.parse(saved) : initialCustomization;
+    } catch {
+      // Corrupt localStorage data — fall back to defaults to avoid blank screen
+      return initialCustomization;
+    }
   });
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('resumemaker_theme');
@@ -38,15 +48,11 @@ export const ResumeProvider = ({ children }) => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  const calculateAtsScore = () => {
+  // Real-time ATS Calculation — inlined to avoid stale closure dependency warning
+  useEffect(() => {
     const { score, feedback } = calculateAtsScoreHelper(resumeData);
     setAtsScore(score);
     setAtsFeedback(feedback);
-  };
-
-  // Real-time ATS Calculation
-  useEffect(() => {
-    calculateAtsScore();
   }, [resumeData]);
 
   // Fetch resumes from backend Express API on launch
@@ -297,7 +303,9 @@ export const ResumeProvider = ({ children }) => {
   };
 
   // Create new blank resume
-  const createNewResume = () => {
+  // Accepts an optional templateId to avoid a race condition where updateCustomization
+  // called right after would be batched with the initialCustomization reset and lose.
+  const createNewResume = (templateId = initialCustomization.templateId) => {
     setActiveResumeId(`res-${Date.now()}`);
     setResumeTitle('My Resume');
     setResumeData({
@@ -310,7 +318,7 @@ export const ResumeProvider = ({ children }) => {
       hobbies: [],
       customSections: []
     });
-    setCustomization(initialCustomization);
+    setCustomization({ ...initialCustomization, templateId });
   };
 
   // Load a resume by ID
@@ -331,80 +339,89 @@ export const ResumeProvider = ({ children }) => {
     }
 
     // 2. Try localStorage
-    const saved = localStorage.getItem('resumemaker_profiles');
-    if (saved) {
-      const list = JSON.parse(saved);
-      const resume = list.find(r => r.id === id);
-      if (resume) {
-        setActiveResumeId(resume.id);
-        setResumeTitle(resume.title || 'Untitled');
-        setResumeData(resume.data);
-        setCustomization(resume.customization);
+    try {
+      const saved = localStorage.getItem('resumemaker_profiles');
+      if (saved) {
+        const list = JSON.parse(saved);
+        const resume = list.find(r => r.id === id);
+        if (resume) {
+          setActiveResumeId(resume.id);
+          setResumeTitle(resume.title || 'Untitled');
+          setResumeData(resume.data || initialResumeData);
+          // Fallback to initialCustomization for resumes saved before customization was tracked
+          setCustomization(resume.customization || initialCustomization);
+        }
       }
+    } catch {
+      console.log('Failed to parse localStorage profiles — data may be corrupt.');
     }
   };
 
   // Save Resume to server (or client fallback)
   const saveResumeToServer = async (titleInput) => {
     setIsSaving(true);
-    const title = titleInput || resumeTitle;
-    setResumeTitle(title);
-    
-    const id = activeResumeId || `res-${Date.now()}`;
-    if (!activeResumeId) {
-      setActiveResumeId(id);
-    }
-
-    const payload = {
-      id,
-      title,
-      data: resumeData,
-      customization,
-      templateId: customization.templateId
-    };
-
     try {
-      const response = await fetch('/api/resumes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (response.ok) {
-        console.log('Saved to server.');
-      } else {
-        throw new Error('Server returned non-200 status');
+      const title = titleInput || resumeTitle;
+      setResumeTitle(title);
+
+      const id = activeResumeId || `res-${Date.now()}`;
+      if (!activeResumeId) {
+        setActiveResumeId(id);
       }
-    } catch (e) {
-      console.log('Saving to localStorage backup.');
-      // Save locally
-      const listStr = localStorage.getItem('resumemaker_profiles') || '[]';
-      const list = JSON.parse(listStr);
-      const index = list.findIndex(r => r.id === id);
-      
-      const enrichedPayload = { ...payload, updatedAt: new Date().toISOString() };
-      if (index !== -1) {
-        list[index] = enrichedPayload;
-      } else {
-        enrichedPayload.createdAt = new Date().toISOString();
-        list.push(enrichedPayload);
+
+      const payload = {
+        id,
+        title,
+        data: resumeData,
+        customization,
+        templateId: customization.templateId
+      };
+
+      try {
+        const response = await fetch('/api/resumes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (response.ok) {
+          console.log('Saved to server.');
+        } else {
+          throw new Error('Server returned non-200 status');
+        }
+      } catch (e) {
+        console.log('Saving to localStorage backup.');
+        // Save locally
+        const listStr = localStorage.getItem('resumemaker_profiles') || '[]';
+        const list = JSON.parse(listStr);
+        const index = list.findIndex(r => r.id === id);
+
+        const enrichedPayload = { ...payload, updatedAt: new Date().toISOString() };
+        if (index !== -1) {
+          list[index] = enrichedPayload;
+        } else {
+          enrichedPayload.createdAt = new Date().toISOString();
+          list.push(enrichedPayload);
+        }
+        localStorage.setItem('resumemaker_profiles', JSON.stringify(list));
+
+        // Update local listing
+        localStorage.setItem(
+          'resumemaker_profiles_list',
+          JSON.stringify(list.map(r => ({
+            id: r.id,
+            title: r.title,
+            updatedAt: r.updatedAt,
+            templateId: r.templateId,
+            personalInfo: { name: r.data.personalInfo.name, email: r.data.personalInfo.email }
+          })))
+        );
       }
-      localStorage.setItem('resumemaker_profiles', JSON.stringify(list));
-      
-      // Update local listing
-      localStorage.setItem(
-        'resumemaker_profiles_list', 
-        JSON.stringify(list.map(r => ({
-          id: r.id,
-          title: r.title,
-          updatedAt: r.updatedAt,
-          templateId: r.templateId,
-          personalInfo: { name: r.data.personalInfo.name, email: r.data.personalInfo.email }
-        })))
-      );
+
+      await fetchSavedResumes();
+    } finally {
+      // Always reset isSaving — even if fetchSavedResumes or any step above throws
+      setIsSaving(false);
     }
-    
-    await fetchSavedResumes();
-    setIsSaving(false);
   };
 
   // Delete resume
@@ -413,13 +430,17 @@ export const ResumeProvider = ({ children }) => {
       const response = await fetch(`/api/resumes/${id}`, {
         method: 'DELETE'
       });
-      if (response.ok) {
-        console.log('Deleted from server.');
-      } else {
+      if (!response.ok) {
         throw new Error('Server error on delete');
       }
+      console.log('Deleted from server.');
     } catch (e) {
-      console.log('Deleting from localStorage backup.');
+      console.log('Server delete failed or unavailable:', e.message);
+    }
+
+    // Always sync localStorage regardless of whether server succeeded or failed.
+    // This ensures the local backup never shows a stale deleted entry.
+    try {
       const listStr = localStorage.getItem('resumemaker_profiles') || '[]';
       const list = JSON.parse(listStr).filter(r => r.id !== id);
       localStorage.setItem('resumemaker_profiles', JSON.stringify(list));
@@ -433,8 +454,10 @@ export const ResumeProvider = ({ children }) => {
           personalInfo: { name: r.data.personalInfo.name, email: r.data.personalInfo.email }
         })))
       );
+    } catch {
+      console.log('Failed to update localStorage after delete.');
     }
-    
+
     if (activeResumeId === id) {
       setActiveResumeId(null);
     }
