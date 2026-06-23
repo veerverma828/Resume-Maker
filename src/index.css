@@ -454,6 +454,20 @@ a {
     justify-content: center;
   }
 
+  @media screen and (max-width: 600px) {
+    .mobile-toggle-btn {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border-radius: 50%;
+      right: 16px;
+      bottom: 16px;
+    }
+    .mobile-toggle-btn span {
+      display: none !important;
+    }
+  }
+
   /* Navbar logo resizing on mobile */
   nav {
     padding: 10px 16px !important;
