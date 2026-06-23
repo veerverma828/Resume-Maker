@@ -46,33 +46,65 @@ export default function EditorPanel({ activeTab, setActiveTab }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
-      {/* Editor Navigation Tabs */}
+      {/* Editor Navigation Tabs (Scrollable Pill Layout) */}
       <div style={{
         display: 'flex',
-        flexWrap: 'wrap',
-        gap: '6px',
+        overflowX: 'auto',
+        gap: '8px',
         borderBottom: '1px solid var(--border-color)',
-        paddingBottom: '12px'
-      }}>
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            className="btn btn-secondary btn-sm"
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              borderColor: activeTab === tab.id ? 'var(--primary)' : 'var(--border-color)',
-              backgroundColor: activeTab === tab.id ? 'var(--primary-light)' : 'var(--bg-card)',
-              color: activeTab === tab.id ? 'var(--primary)' : 'var(--text-primary)',
-              fontWeight: activeTab === tab.id ? 700 : 500,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            {tab.icon}
-            <span>{tab.name}</span>
-          </button>
-        ))}
+        paddingBottom: '12px',
+        scrollbarWidth: 'none', /* Firefox */
+        msOverflowStyle: 'none' /* IE/Edge */
+      }} className="editor-nav-tabs">
+        {tabs.map(tab => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              className="btn btn-sm"
+              onClick={() => {
+                if (document.startViewTransition) {
+                  document.startViewTransition(() => {
+                    setActiveTab(tab.id);
+                  });
+                } else {
+                  setActiveTab(tab.id);
+                }
+              }}
+              style={{
+                flexShrink: 0,
+                padding: '8px 16px',
+                borderRadius: '50px',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--primary)' : 'var(--border-color)',
+                backgroundColor: isActive ? 'var(--primary-light)' : 'var(--bg-card)',
+                color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                fontWeight: isActive ? 600 : 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                  e.currentTarget.style.borderColor = 'var(--border-hover)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-card)';
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                }
+              }}
+            >
+              {tab.icon}
+              <span>{tab.name}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Editor Forms Area */}

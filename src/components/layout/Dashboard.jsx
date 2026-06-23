@@ -55,7 +55,7 @@ export default function Dashboard({ setCurrentView }) {
       }}>
         {/* Creation Card */}
         <div 
-          className="glass-panel"
+          className="glass-panel card-hover"
           onClick={handleCreateNew}
           style={{
             height: '220px',
@@ -67,16 +67,7 @@ export default function Dashboard({ setCurrentView }) {
             justifyContent: 'center',
             gap: '12px',
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
             backgroundColor: 'transparent'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--primary)';
-            e.currentTarget.style.backgroundColor = 'var(--primary-light)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border-color)';
-            e.currentTarget.style.backgroundColor = 'transparent';
           }}
         >
           <div style={{
@@ -99,7 +90,7 @@ export default function Dashboard({ setCurrentView }) {
         {savedResumes.map((resume) => (
           <div 
             key={resume.id}
-            className="glass-panel"
+            className="glass-panel card-hover"
             style={{
               height: '220px',
               borderRadius: '12px',

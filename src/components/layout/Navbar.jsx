@@ -34,7 +34,13 @@ export default function Navbar({ currentView, setCurrentView }) {
       const success = importResume(event.target.result);
       if (success) {
         alert('Resume data imported successfully!');
-        setCurrentView('editor');
+        if (document.startViewTransition) {
+          document.startViewTransition(() => {
+            setCurrentView('editor');
+          });
+        } else {
+          setCurrentView('editor');
+        }
       } else {
         alert('Invalid backup file. Please try again.');
       }
@@ -193,6 +199,9 @@ export default function Navbar({ currentView, setCurrentView }) {
           className="btn btn-secondary btn-icon-only"
           onClick={toggleTheme}
           title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+          style={{ transition: 'all 0.3s ease' }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'rotate(30deg) scale(1.05)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'rotate(0deg) scale(1)'}
         >
           {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
         </button>

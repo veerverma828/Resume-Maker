@@ -33,19 +33,32 @@ function MainApp() {
 
     if (window.location.pathname !== path) {
       window.history.pushState({}, '', path);
-      setCurrentView(view);
+      if (document.startViewTransition) {
+        document.startViewTransition(() => {
+          setCurrentView(view);
+        });
+      } else {
+        setCurrentView(view);
+      }
     }
   };
 
   useEffect(() => {
     const handleLocationChange = () => {
       const path = window.location.pathname;
+      let targetView = 'landing';
       if (path.endsWith('/dashboard') || path.endsWith('/dashboard/')) {
-        setCurrentView('dashboard');
+        targetView = 'dashboard';
       } else if (path.endsWith('/editor') || path.endsWith('/editor/')) {
-        setCurrentView('editor');
+        targetView = 'editor';
+      }
+
+      if (document.startViewTransition) {
+        document.startViewTransition(() => {
+          setCurrentView(targetView);
+        });
       } else {
-        setCurrentView('landing');
+        setCurrentView(targetView);
       }
     };
 
@@ -84,36 +97,61 @@ function MainApp() {
                 height: 'calc(100vh - 61px)', // Adjust height relative to navbar
                 backgroundColor: 'var(--bg-card)'
               }}>
-                {/* Secondary Sidebar Controls */}
+                {/* Secondary Sidebar Controls (Segmented Pill Layout) */}
                 <div style={{
-                  display: 'flex',
+                  padding: '12px 16px',
                   borderBottom: '1px solid var(--border-color)',
-                  backgroundColor: 'var(--bg-app)',
-                  padding: '8px 16px',
-                  gap: '12px'
+                  backgroundColor: 'var(--bg-card)'
                 }}>
-                  {[
-                    { id: 'content', name: 'Content Form', icon: <PenTool size={16} /> },
-                    { id: 'style', name: 'Design & Style', icon: <Palette size={16} /> },
-                    { id: 'ats', name: `ATS (${atsScore}%)`, icon: <ShieldAlert size={16} /> }
-                  ].map(sec => (
-                    <button
-                      key={sec.id}
-                      onClick={() => setLeftPaneSection(sec.id)}
-                      className="btn btn-secondary btn-sm"
-                      style={{
-                        padding: '6px 12px',
-                        fontWeight: leftPaneSection === sec.id ? 700 : 500,
-                        backgroundColor: leftPaneSection === sec.id ? 'var(--primary)' : 'transparent',
-                        color: leftPaneSection === sec.id ? '#ffffff' : 'var(--text-secondary)',
-                        borderColor: leftPaneSection === sec.id ? 'var(--primary)' : 'transparent',
-                        boxShadow: leftPaneSection === sec.id ? 'var(--shadow-sm)' : 'none'
-                      }}
-                    >
-                      {sec.icon}
-                      <span className="hidden-mobile">{sec.name}</span>
-                    </button>
-                  ))}
+                  <div style={{
+                    display: 'flex',
+                    backgroundColor: 'var(--bg-app)',
+                    padding: '4px',
+                    borderRadius: '10px',
+                    gap: '4px',
+                    border: '1px solid var(--border-color)'
+                  }}>
+                    {[
+                      { id: 'content', name: 'Content Form', icon: <PenTool size={15} /> },
+                      { id: 'style', name: 'Design & Style', icon: <Palette size={15} /> },
+                      { id: 'ats', name: `ATS (${atsScore}%)`, icon: <ShieldAlert size={15} /> }
+                    ].map(sec => {
+                      const isActive = leftPaneSection === sec.id;
+                      return (
+                        <button
+                          key={sec.id}
+                          onClick={() => {
+                            if (document.startViewTransition) {
+                              document.startViewTransition(() => {
+                                setLeftPaneSection(sec.id);
+                              });
+                            } else {
+                              setLeftPaneSection(sec.id);
+                            }
+                          }}
+                          className="btn btn-sm"
+                          style={{
+                            flex: 1,
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            fontWeight: isActive ? 600 : 500,
+                            backgroundColor: isActive ? 'var(--bg-card)' : 'transparent',
+                            color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                            border: 'none',
+                            boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
+                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px'
+                          }}
+                        >
+                          {sec.icon}
+                          <span className="hidden-mobile">{sec.name}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Sub Panel Scroll Area */}

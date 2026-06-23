@@ -230,7 +230,7 @@ export default function LandingPage({ setCurrentView }) {
         gap: '24px',
         margin: '20px 0 80px 0'
       }}>
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
+        <div className="glass-panel card-hover" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
           <div style={{
             width: '40px',
             height: '40px',
@@ -250,7 +250,7 @@ export default function LandingPage({ setCurrentView }) {
           </p>
         </div>
 
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
+        <div className="glass-panel card-hover" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
           <div style={{
             width: '40px',
             height: '40px',
@@ -270,7 +270,7 @@ export default function LandingPage({ setCurrentView }) {
           </p>
         </div>
 
-        <div className="glass-panel" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
+        <div className="glass-panel card-hover" style={{ padding: '24px', borderRadius: '16px', textAlign: 'left' }}>
           <div style={{
             width: '40px',
             height: '40px',
@@ -308,25 +308,16 @@ export default function LandingPage({ setCurrentView }) {
           {templatesList.map((temp) => (
             <div
               key={temp.id}
-              className="glass-panel"
+              className="glass-panel card-hover"
               style={{
                 borderRadius: '16px',
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
                 cursor: 'pointer',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 position: 'relative'
               }}
               onClick={() => handleSelectTemplate(temp.id)}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow = `0 12px 24px rgba(0,0,0,0.15)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-              }}
             >
               {/* Template Preview Representation */}
               <div style={{

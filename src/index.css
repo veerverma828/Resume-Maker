@@ -72,6 +72,9 @@ body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--bg-app);
+  background-image: radial-gradient(circle at 50% 0%, hsla(var(--primary-hsl), 0.08) 0%, transparent 60%),
+                    radial-gradient(circle at 100% 100%, hsla(var(--secondary-hsl), 0.03) 0%, transparent 40%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -97,21 +100,22 @@ a {
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-app);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+  background: hsla(var(--primary-hsl), 0.2);
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: hsla(var(--primary-hsl), 0.5);
 }
 
 /* Glassmorphism Styles */
@@ -528,5 +532,54 @@ a {
     padding: 8px;
   }
 }
+
+/* Custom Premium UI Utilities */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--primary) !important;
+  box-shadow: 0 12px 24px -10px hsla(var(--primary-hsl), 0.25),
+              0 8px 16px -8px hsla(var(--primary-hsl), 0.2) !important;
+}
+
+/* Glass panel glow border */
+.glass-panel-glow {
+  position: relative;
+}
+
+.glass-panel-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsla(var(--primary-hsl), 0.3), hsla(var(--secondary-hsl), 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* View transitions tags */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.editor-nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
 
 
