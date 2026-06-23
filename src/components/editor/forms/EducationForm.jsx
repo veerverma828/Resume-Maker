@@ -12,6 +12,7 @@ export default function EducationForm() {
   } = useResume();
 
   const [expandedSection, setExpandedSection] = useState(null);
+  const [canDragId, setCanDragId] = useState(null);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData('text/plain', index);
@@ -44,7 +45,7 @@ export default function EducationForm() {
           <div 
             key={edu.id} 
             className="glass-panel"
-            draggable
+            draggable={canDragId === edu.id}
             onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
@@ -63,7 +64,13 @@ export default function EducationForm() {
               cursor: 'pointer'
             }} onClick={() => setExpandedSection(expandedSection === edu.id ? null : edu.id)}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <GripVertical size={16} style={{ color: 'var(--text-muted)', cursor: 'grab' }} onClick={(e) => e.stopPropagation()} />
+                <GripVertical 
+                  size={16} 
+                  style={{ color: 'var(--text-muted)', cursor: 'grab' }} 
+                  onMouseEnter={() => setCanDragId(edu.id)}
+                  onMouseLeave={() => setCanDragId(null)}
+                  onClick={(e) => e.stopPropagation()} 
+                />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>
                   {edu.degree || 'New Degree'} {edu.school ? `@ ${edu.school}` : ''}
                 </span>
@@ -90,7 +97,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Degree / Field of Study</label>
                     <input
                       type="text"
-                      value={edu.degree}
+                      value={edu.degree || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { degree: e.target.value })}
                       className="form-input"
                       placeholder="e.g. BS in Computer Science"
@@ -100,7 +107,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>School / University</label>
                     <input
                       type="text"
-                      value={edu.school}
+                      value={edu.school || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { school: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Stanford University"
@@ -113,7 +120,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Location</label>
                     <input
                       type="text"
-                      value={edu.location}
+                      value={edu.location || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { location: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Stanford, CA"
@@ -123,7 +130,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>GPA (Optional)</label>
                     <input
                       type="text"
-                      value={edu.gpa}
+                      value={edu.gpa || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { gpa: e.target.value })}
                       className="form-input"
                       placeholder="e.g. 3.8/4.0"
@@ -136,7 +143,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Start Date</label>
                     <input
                       type="month"
-                      value={edu.startDate}
+                      value={edu.startDate || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { startDate: e.target.value })}
                       className="form-input"
                     />
@@ -145,7 +152,7 @@ export default function EducationForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>End Date (or Expected)</label>
                     <input
                       type="month"
-                      value={edu.endDate}
+                      value={edu.endDate || ''}
                       onChange={(e) => updateEducationEntry(edu.id, { endDate: e.target.value })}
                       className="form-input"
                     />
@@ -155,7 +162,7 @@ export default function EducationForm() {
                 <div className="form-group">
                   <label className="form-label" style={{ fontSize: '0.75rem' }}>Academic Details / Accomplishments</label>
                   <textarea
-                    value={edu.description}
+                    value={edu.description || ''}
                     onChange={(e) => updateEducationEntry(edu.id, { description: e.target.value })}
                     className="form-textarea"
                     rows="3"

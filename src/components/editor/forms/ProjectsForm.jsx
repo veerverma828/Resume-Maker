@@ -12,6 +12,7 @@ export default function ProjectsForm() {
   } = useResume();
 
   const [expandedSection, setExpandedSection] = useState(null);
+  const [canDragId, setCanDragId] = useState(null);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData('text/plain', index);
@@ -44,7 +45,7 @@ export default function ProjectsForm() {
           <div 
             key={proj.id} 
             className="glass-panel"
-            draggable
+            draggable={canDragId === proj.id}
             onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
@@ -63,7 +64,13 @@ export default function ProjectsForm() {
               cursor: 'pointer'
             }} onClick={() => setExpandedSection(expandedSection === proj.id ? null : proj.id)}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <GripVertical size={16} style={{ color: 'var(--text-muted)', cursor: 'grab' }} onClick={(e) => e.stopPropagation()} />
+                <GripVertical 
+                  size={16} 
+                  style={{ color: 'var(--text-muted)', cursor: 'grab' }} 
+                  onMouseEnter={() => setCanDragId(proj.id)}
+                  onMouseLeave={() => setCanDragId(null)}
+                  onClick={(e) => e.stopPropagation()} 
+                />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>
                   {proj.name || 'New Project'} {proj.role ? `(${proj.role})` : ''}
                 </span>
@@ -90,7 +97,7 @@ export default function ProjectsForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Project Name</label>
                     <input
                       type="text"
-                      value={proj.name}
+                      value={proj.name || ''}
                       onChange={(e) => updateProjectEntry(proj.id, { name: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Kanban Task Dashboard"
@@ -100,7 +107,7 @@ export default function ProjectsForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Your Role</label>
                     <input
                       type="text"
-                      value={proj.role}
+                      value={proj.role || ''}
                       onChange={(e) => updateProjectEntry(proj.id, { role: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Full Stack Creator"
@@ -113,7 +120,7 @@ export default function ProjectsForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Technologies Used</label>
                     <input
                       type="text"
-                      value={proj.technologies}
+                      value={proj.technologies || ''}
                       onChange={(e) => updateProjectEntry(proj.id, { technologies: e.target.value })}
                       className="form-input"
                       placeholder="e.g. React, Node.js, CSS Grid"
@@ -123,7 +130,7 @@ export default function ProjectsForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Project Link (GitHub/Website)</label>
                     <input
                       type="text"
-                      value={proj.link}
+                      value={proj.link || ''}
                       onChange={(e) => updateProjectEntry(proj.id, { link: e.target.value })}
                       className="form-input"
                       placeholder="e.g. github.com/user/project"
@@ -134,7 +141,7 @@ export default function ProjectsForm() {
                 <div className="form-group">
                   <label className="form-label" style={{ fontSize: '0.75rem' }}>Brief Description</label>
                   <textarea
-                    value={proj.description}
+                    value={proj.description || ''}
                     onChange={(e) => updateProjectEntry(proj.id, { description: e.target.value })}
                     className="form-textarea"
                     rows="3"

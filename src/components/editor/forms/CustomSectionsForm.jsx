@@ -12,6 +12,7 @@ export default function CustomSectionsForm() {
   } = useResume();
 
   const [expandedSection, setExpandedSection] = useState(null);
+  const [canDragId, setCanDragId] = useState(null);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData('text/plain', index);
@@ -44,7 +45,7 @@ export default function CustomSectionsForm() {
           <div 
             key={cs.id}
             className="glass-panel"
-            draggable
+            draggable={canDragId === cs.id}
             onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
@@ -63,7 +64,13 @@ export default function CustomSectionsForm() {
               cursor: 'pointer'
             }} onClick={() => setExpandedSection(expandedSection === cs.id ? null : cs.id)}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <GripVertical size={16} style={{ color: 'var(--text-muted)', cursor: 'grab' }} onClick={(e) => e.stopPropagation()} />
+                <GripVertical 
+                  size={16} 
+                  style={{ color: 'var(--text-muted)', cursor: 'grab' }} 
+                  onMouseEnter={() => setCanDragId(cs.id)}
+                  onMouseLeave={() => setCanDragId(null)}
+                  onClick={(e) => e.stopPropagation()} 
+                />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>
                   {cs.title || 'Untitled Custom Section'}
                 </span>
@@ -89,7 +96,7 @@ export default function CustomSectionsForm() {
                   <label className="form-label" style={{ fontSize: '0.75rem' }}>Section Title</label>
                   <input
                     type="text"
-                    value={cs.title}
+                    value={cs.title || ''}
                     onChange={(e) => updateCustomSection(cs.id, { title: e.target.value })}
                     className="form-input"
                     placeholder="e.g. Publications, Certifications"
@@ -98,7 +105,7 @@ export default function CustomSectionsForm() {
                 <div className="form-group">
                   <label className="form-label" style={{ fontSize: '0.75rem' }}>Section Content (Markdown or plain text)</label>
                   <textarea
-                    value={cs.content}
+                    value={cs.content || ''}
                     onChange={(e) => updateCustomSection(cs.id, { content: e.target.value })}
                     className="form-textarea"
                     rows="4"

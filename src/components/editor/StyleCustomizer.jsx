@@ -185,6 +185,33 @@ export default function StyleCustomizer() {
             ))}
           </div>
         </div>
+
+        {/* Section Spacing Selector */}
+        <div style={{ marginTop: '14px' }}>
+          <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '6px', display: 'block' }}>Section Spacing</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '6px' }}>
+            {[
+              { id: 'compact', name: 'Compact' },
+              { id: 'normal', name: 'Normal' },
+              { id: 'loose', name: 'Loose' }
+            ].map(spacing => (
+              <button
+                key={spacing.id}
+                className="btn btn-secondary btn-sm"
+                onClick={() => updateCustomization({ sectionSpacing: spacing.id })}
+                style={{
+                  padding: '4px',
+                  fontSize: '0.75rem',
+                  borderColor: customization.sectionSpacing === spacing.id ? 'var(--primary)' : 'var(--border-color)',
+                  backgroundColor: customization.sectionSpacing === spacing.id ? 'var(--primary-light)' : 'var(--bg-card)',
+                  color: customization.sectionSpacing === spacing.id ? 'var(--primary)' : 'var(--text-primary)'
+                }}
+              >
+                {spacing.name}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
     </div>

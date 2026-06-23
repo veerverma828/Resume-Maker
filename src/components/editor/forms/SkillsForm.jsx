@@ -40,7 +40,7 @@ export default function SkillsForm() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <input
                 type="text"
-                value={sk.name}
+                value={sk.name || ''}
                 onChange={(e) => updateSkill(sk.id, { name: e.target.value })}
                 className="form-input"
                 style={{ fontSize: '0.85rem', padding: '4px 8px', border: 'none', background: 'transparent', fontWeight: 600, width: '80%' }}

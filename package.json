@@ -10,7 +10,8 @@
     "dev": "concurrently \"npm run client\" \"npm run server-dev\"",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "repomix": "repomix"
   },
   "dependencies": {
     "lucide-react": "^0.475.0",
@@ -27,6 +28,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "repomix": "^1.15.0",
     "vite": "^8.0.12"
   }
 }

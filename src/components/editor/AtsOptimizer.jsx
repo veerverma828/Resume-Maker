@@ -118,7 +118,6 @@ export default function AtsOptimizer({ setActiveTab }) {
                   cursor: item.section ? 'pointer' : 'default',
                   transition: 'all 0.15s ease'
                 }}
-                className={item.section ? 'draggable-item' : ''}
                 onMouseEnter={(e) => {
                   if (item.section) {
                     e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';

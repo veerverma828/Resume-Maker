@@ -12,6 +12,7 @@ export default function ExperienceForm() {
   } = useResume();
 
   const [expandedSection, setExpandedSection] = useState(null);
+  const [canDragId, setCanDragId] = useState(null);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData('text/plain', index);
@@ -44,7 +45,7 @@ export default function ExperienceForm() {
           <div 
             key={exp.id} 
             className="glass-panel"
-            draggable
+            draggable={canDragId === exp.id}
             onDragStart={(e) => handleDragStart(e, index)}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, index)}
@@ -64,7 +65,13 @@ export default function ExperienceForm() {
               cursor: 'pointer'
             }} onClick={() => setExpandedSection(expandedSection === exp.id ? null : exp.id)}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <GripVertical size={16} style={{ color: 'var(--text-muted)', cursor: 'grab' }} onClick={(e) => e.stopPropagation()} />
+                <GripVertical 
+                  size={16} 
+                  style={{ color: 'var(--text-muted)', cursor: 'grab' }} 
+                  onMouseEnter={() => setCanDragId(exp.id)}
+                  onMouseLeave={() => setCanDragId(null)}
+                  onClick={(e) => e.stopPropagation()} 
+                />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>
                   {exp.position || 'New Position'} {exp.company ? `@ ${exp.company}` : ''}
                 </span>
@@ -92,7 +99,7 @@ export default function ExperienceForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Position</label>
                     <input
                       type="text"
-                      value={exp.position}
+                      value={exp.position || ''}
                       onChange={(e) => updateExperienceEntry(exp.id, { position: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Lead Engineer"
@@ -102,7 +109,7 @@ export default function ExperienceForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Company</label>
                     <input
                       type="text"
-                      value={exp.company}
+                      value={exp.company || ''}
                       onChange={(e) => updateExperienceEntry(exp.id, { company: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Google"
@@ -115,7 +122,7 @@ export default function ExperienceForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Location</label>
                     <input
                       type="text"
-                      value={exp.location}
+                      value={exp.location || ''}
                       onChange={(e) => updateExperienceEntry(exp.id, { location: e.target.value })}
                       className="form-input"
                       placeholder="e.g. Mountain View, CA"
@@ -138,7 +145,7 @@ export default function ExperienceForm() {
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Start Date</label>
                     <input
                       type="month"
-                      value={exp.startDate}
+                      value={exp.startDate || ''}
                       onChange={(e) => updateExperienceEntry(exp.id, { startDate: e.target.value })}
                       className="form-input"
                     />
@@ -148,7 +155,7 @@ export default function ExperienceForm() {
                       <label className="form-label" style={{ fontSize: '0.75rem' }}>End Date</label>
                       <input
                         type="month"
-                        value={exp.endDate}
+                        value={exp.endDate || ''}
                         onChange={(e) => updateExperienceEntry(exp.id, { endDate: e.target.value })}
                         className="form-input"
                       />
@@ -159,7 +166,7 @@ export default function ExperienceForm() {
                 <div className="form-group">
                   <label className="form-label" style={{ fontSize: '0.75rem' }}>Role Description (One bullet per line recommended)</label>
                   <textarea
-                    value={exp.description}
+                    value={exp.description || ''}
                     onChange={(e) => updateExperienceEntry(exp.id, { description: e.target.value })}
                     className="form-textarea"
                     rows="4"

@@ -24,7 +24,7 @@ export default function PersonalInfoForm() {
             <label className="form-label">Full Name</label>
             <input
               type="text"
-              value={resumeData.personalInfo.name}
+              value={resumeData.personalInfo.name || ''}
               onChange={(e) => updatePersonalInfo({ name: e.target.value })}
               className="form-input"
               placeholder="e.g. Alex Morgan"
@@ -34,7 +34,7 @@ export default function PersonalInfoForm() {
             <label className="form-label">Professional Subtitle</label>
             <input
               type="text"
-              value={resumeData.personalInfo.title}
+              value={resumeData.personalInfo.title || ''}
               onChange={(e) => updatePersonalInfo({ title: e.target.value })}
               className="form-input"
               placeholder="e.g. Senior Software Engineer"
@@ -99,7 +99,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">Email</label>
           <input
             type="email"
-            value={resumeData.personalInfo.email}
+            value={resumeData.personalInfo.email || ''}
             onChange={(e) => updatePersonalInfo({ email: e.target.value })}
             className="form-input"
             placeholder="alex@tech.dev"
@@ -109,7 +109,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">Phone</label>
           <input
             type="text"
-            value={resumeData.personalInfo.phone}
+            value={resumeData.personalInfo.phone || ''}
             onChange={(e) => updatePersonalInfo({ phone: e.target.value })}
             className="form-input"
             placeholder="(555) 019-2834"
@@ -122,7 +122,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">Location (City, State)</label>
           <input
             type="text"
-            value={resumeData.personalInfo.location}
+            value={resumeData.personalInfo.location || ''}
             onChange={(e) => updatePersonalInfo({ location: e.target.value })}
             className="form-input"
             placeholder="San Francisco, CA"
@@ -132,7 +132,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">Website / Portfolio</label>
           <input
             type="text"
-            value={resumeData.personalInfo.website}
+            value={resumeData.personalInfo.website || ''}
             onChange={(e) => updatePersonalInfo({ website: e.target.value })}
             className="form-input"
             placeholder="alexmorgan.dev"
@@ -145,7 +145,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">LinkedIn Profile</label>
           <input
             type="text"
-            value={resumeData.personalInfo.linkedin}
+            value={resumeData.personalInfo.linkedin || ''}
             onChange={(e) => updatePersonalInfo({ linkedin: e.target.value })}
             className="form-input"
             placeholder="linkedin.com/in/alexmorgan"
@@ -155,7 +155,7 @@ export default function PersonalInfoForm() {
           <label className="form-label">GitHub Profile</label>
           <input
             type="text"
-            value={resumeData.personalInfo.github}
+            value={resumeData.personalInfo.github || ''}
             onChange={(e) => updatePersonalInfo({ github: e.target.value })}
             className="form-input"
             placeholder="github.com/alexmorgan"
@@ -166,7 +166,7 @@ export default function PersonalInfoForm() {
       <div className="form-group">
         <label className="form-label">Professional Summary</label>
         <textarea
-          value={resumeData.personalInfo.summary}
+          value={resumeData.personalInfo.summary || ''}
           onChange={(e) => updatePersonalInfo({ summary: e.target.value })}
           className="form-textarea"
           placeholder="Brief summary of your professional expertise, achievements, and career focus..."

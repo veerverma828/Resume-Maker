@@ -32,3 +32,6 @@ server/data/*.json
 .env.test.local
 .env.production.local
 
+# Repomix outputs
+repomix-output.xml
+repomix-output.*

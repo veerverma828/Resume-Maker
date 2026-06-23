@@ -20,22 +20,31 @@ export default function PreviewPanel() {
     }
   };
   const wrapperRef = useRef(null);
+  const innerRef = useRef(null);
   const [scale, setScale] = useState(1);
+  const [actualHeight, setActualHeight] = useState(RESUME_WIDTH * 1.414);
 
-  // Compute scale to fit resume within wrapper width
+  // Compute scale to fit resume within wrapper width and measure dynamic height
   useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
+    const wrapper = wrapperRef.current;
+    const inner = innerRef.current;
+    if (!wrapper || !inner) return;
+
     const compute = () => {
-      const containerWidth = el.offsetWidth;
+      const containerWidth = wrapper.offsetWidth;
       const newScale = Math.min(1, containerWidth / RESUME_WIDTH);
       setScale(newScale);
+      setActualHeight(inner.offsetHeight || (RESUME_WIDTH * 1.414));
     };
+
     compute();
+
     const observer = new ResizeObserver(compute);
-    observer.observe(el);
+    observer.observe(wrapper);
+    observer.observe(inner);
+
     return () => observer.disconnect();
-  }, []);
+  }, [resumeData, customization]);
 
   const handlePrint = () => {
     const resumeElement = document.querySelector('.resume-preview-container');
@@ -170,21 +179,12 @@ export default function PreviewPanel() {
       height: '100%'
     }}>
       {/* Live Preview Header Toolbar */}
-      <div 
-        className="glass-panel no-print" 
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '12px 18px',
-          borderRadius: '10px',
-          border: '1px solid var(--border-color)'
-        }}
-      >
-        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+      {/* Live Preview Header Toolbar */}
+      <div className="glass-panel preview-toolbar no-print">
+        <span className="preview-toolbar-title" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
           Live Document Preview
         </span>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="preview-toolbar-actions">
           <button 
             className="btn btn-secondary btn-sm"
             onClick={handleLoadDemo}
@@ -226,14 +226,17 @@ export default function PreviewPanel() {
           }}
         >
           {/* Inner container: fixed at 800px, scaled down to fit, centered automatically */}
-          <div style={{
-            width: `${RESUME_WIDTH}px`,
-            transformOrigin: 'top center',
-            transform: `scale(${scale})`,
-            // Collapse the empty space that remains after scaling
-            marginBottom: `${-(RESUME_WIDTH * 1.414 * (1 - scale))}px`,
-            flexShrink: 0
-          }}>
+          <div 
+            ref={innerRef}
+            style={{
+              width: `${RESUME_WIDTH}px`,
+              transformOrigin: 'top center',
+              transform: `scale(${scale})`,
+              // Collapse the empty space that remains after scaling
+              marginBottom: `${-(actualHeight * (1 - scale))}px`,
+              flexShrink: 0
+            }}
+          >
             {renderTemplate()}
           </div>
         </div>
