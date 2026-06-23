@@ -345,16 +345,25 @@ a {
     box-shadow: none !important;
   }
 
-  /* Reset PreviewPanel nested styling container constraints */
+  /* Reset PreviewPanel nested styling container constraints.
+     The preview column has ~5 levels of nesting before the resume:
+     .preview-column > div > div > div > .resume-scale-wrapper > .resume-preview-container
+     We use both deep child selectors and the explicit class to cover all wrappers. */
   .preview-column > div:not(.no-print),
   .preview-column > div > div:not(.no-print),
   .preview-column > div > div > div:not(.no-print),
+  .preview-column > div > div > div > div:not(.no-print),
+  .preview-column > div > div > div > div > div:not(.no-print),
   .mobile-show-editor .preview-column > div:not(.no-print),
   .mobile-show-editor .preview-column > div > div:not(.no-print),
   .mobile-show-editor .preview-column > div > div > div:not(.no-print),
+  .mobile-show-editor .preview-column > div > div > div > div:not(.no-print),
+  .mobile-show-editor .preview-column > div > div > div > div > div:not(.no-print),
   .mobile-show-preview .preview-column > div:not(.no-print),
   .mobile-show-preview .preview-column > div > div:not(.no-print),
-  .mobile-show-preview .preview-column > div > div > div:not(.no-print) {
+  .mobile-show-preview .preview-column > div > div > div:not(.no-print),
+  .mobile-show-preview .preview-column > div > div > div > div:not(.no-print),
+  .mobile-show-preview .preview-column > div > div > div > div > div:not(.no-print) {
     display: block !important;
     width: 800px !important;
     min-width: 800px !important;
@@ -367,7 +376,17 @@ a {
     border: none !important;
     background: transparent !important;
     box-shadow: none !important;
-    transform: none !important; /* Prevent browser print scaling distortion */
+    transform: none !important;
+  }
+
+  /* Explicitly reset the scaling wrapper that shrinks the resume on mobile screens.
+     Without this, the inline transform: scale(0.4) persists during print. */
+  .resume-scale-wrapper {
+    transform: none !important;
+    margin-bottom: 0 !important;
+    width: 800px !important;
+    min-width: 800px !important;
+    max-width: 800px !important;
   }
   
   .resume-preview-container {

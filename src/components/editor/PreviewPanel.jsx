@@ -54,89 +54,107 @@ export default function PreviewPanel() {
     const resumeElement = document.querySelector('.resume-preview-container');
     if (!resumeElement) return;
 
-    // Copy all style/stylesheet link tags from parent document
+    // Collect all stylesheets from the current document
     let stylesHTML = '';
-    const styleElements = document.querySelectorAll('style, link[rel="stylesheet"]');
-    styleElements.forEach(el => {
+    document.querySelectorAll('style, link[rel="stylesheet"]').forEach(el => {
       stylesHTML += el.outerHTML;
     });
 
-    // Open a new tab. Mobile browsers correctly respect the viewport meta tag
-    // on a top-level page, unlike inside iframes where it is ignored.
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      // Popup was blocked — fall back to a simple window.print() as a last resort
-      window.print();
-      return;
+    const printHTML = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Resume</title>
+  <meta name="viewport" content="width=800, initial-scale=1.0">
+  ${stylesHTML}
+  <style>
+    @page { size: A4 portrait; margin: 0mm; }
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
+    html, body {
+      background: white !important;
+      color: black !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 800px !important;
+      min-width: 800px !important;
+      max-width: 800px !important;
+      height: auto !important;
+      min-height: auto !important;
+      overflow: visible !important;
+    }
+    .resume-preview-container {
+      width: 800px !important;
+      min-width: 800px !important;
+      max-width: 800px !important;
+      height: auto !important;
+      min-height: auto !important;
+      aspect-ratio: auto !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border: none !important;
+      overflow: visible !important;
+      transform: none !important;
+    }
+  </style>
+</head>
+<body>${resumeElement.outerHTML}</body>
+</html>`;
 
-    printWindow.document.open();
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Resume</title>
-          <!--
-            width=800 tells mobile browsers to lay out the page as if the viewport
-            is 800px wide, matching the fixed resume width so nothing is miniaturized.
-          -->
-          <meta name="viewport" content="width=800, initial-scale=1.0, shrink-to-fit=no">
-          ${stylesHTML}
-          <style>
-            @page {
-              size: A4 portrait;
-              margin: 0mm;
-            }
-            html, body {
-              background: white !important;
-              color: black !important;
-              margin: 0 !important;
-              padding: 0 !important;
-              width: 800px !important;
-              min-width: 800px !important;
-              max-width: 800px !important;
-              /* height: auto so the browser only prints as many pages as content needs */
-              height: auto !important;
-              min-height: auto !important;
-              overflow: visible !important;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
-            .resume-preview-container {
-              width: 800px !important;
-              min-width: 800px !important;
-              max-width: 800px !important;
-              /* Override the default min-height so a short resume doesn't force a blank second page */
-              height: auto !important;
-              min-height: auto !important;
-              aspect-ratio: auto !important;
-              box-shadow: none !important;
-              margin: 0 !important;
-              border: none !important;
-              overflow: visible !important;
-              transform: none !important;
-            }
-          </style>
-        </head>
-        <body>
-          ${resumeElement.outerHTML}
-          <script>
-            // Trigger print automatically once the page is fully loaded
-            window.onload = function() {
-              setTimeout(function() {
-                window.focus();
-                window.print();
-                // Close the tab after the print dialog is dismissed
-                window.onafterprint = function() {
-                  window.close();
-                };
-              }, 400);
-            };
-          <\/script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    // Use a hidden iframe for printing — works reliably on mobile
+    // unlike window.open() which gets popup-blocked on most mobile browsers.
+    const iframe = document.createElement('iframe');
+    Object.assign(iframe.style, {
+      position: 'fixed',
+      left: '-9999px',
+      top: '-9999px',
+      width: '800px',
+      height: '1200px',
+      border: 'none',
+      opacity: '0',
+      pointerEvents: 'none'
+    });
+    document.body.appendChild(iframe);
+
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDoc.open();
+    iframeDoc.write(printHTML);
+    iframeDoc.close();
+
+    const cleanup = () => {
+      setTimeout(() => {
+        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+      }, 2000);
+    };
+
+    const executePrint = () => {
+      try {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        cleanup();
+      } catch (err) {
+        // iframe print not supported (some iOS versions) — fall back to
+        // window.print() which now works thanks to improved @media print CSS
+        cleanup();
+        window.print();
+      }
+    };
+
+    // Wait for fonts to finish loading inside the iframe before printing,
+    // otherwise the printed output may use fallback fonts.
+    const fontsAPI = iframeDoc.fonts;
+    if (fontsAPI && fontsAPI.ready) {
+      // Small delay lets the browser begin discovering font references after doc.close()
+      setTimeout(() => {
+        fontsAPI.ready
+          .then(() => setTimeout(executePrint, 100))
+          .catch(() => setTimeout(executePrint, 100));
+      }, 200);
+    } else {
+      // No Font Loading API (older browsers) — use a generous timeout
+      setTimeout(executePrint, 800);
+    }
   };
 
 
@@ -219,6 +237,7 @@ export default function PreviewPanel() {
           {/* Inner container: fixed at 800px, scaled down to fit, centered automatically */}
           <div 
             ref={innerRef}
+            className="resume-scale-wrapper"
             style={{
               width: `${RESUME_WIDTH}px`,
               transformOrigin: 'top center',
