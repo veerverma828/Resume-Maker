@@ -420,6 +420,7 @@ a {
     display: flex !important;
     width: 100% !important;
     height: calc(100vh - 61px) !important;
+    min-width: 0 !important;
   }
   .mobile-show-editor .preview-column {
     display: none !important;
@@ -597,20 +598,20 @@ a {
 
 /* Navbar Responsiveness */
 .navbar-title {
-  max-width: 180px;
+  max-width: 360px;
 }
 
 .navbar-title-input {
-  width: 180px;
+  width: 360px;
 }
 
 @media screen and (max-width: 600px) {
   .navbar-title {
-    max-width: 90px !important;
+    max-width: 160px !important;
   }
   
   .navbar-title-input {
-    width: 90px !important;
+    width: 160px !important;
   }
   
   .btn-mobile-icon {
